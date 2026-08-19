@@ -3,6 +3,14 @@ import { useMutation } from '@tanstack/react-query'
 import { ArrowLeft, ImagePlus, LoaderCircle, Sparkles, Trash2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_CATEGORY_LABELS,
+  PRODUCT_CONDITIONS,
+  PRODUCT_CONDITION_LABELS,
+  type ProductCategory,
+  type ProductCondition,
+} from '@campus/shared'
 
 import { getAuthHeaders } from '@/auth/auth-context'
 import { Badge } from '@/components/ui/badge'
@@ -13,9 +21,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
-type Category = 'digital' | 'books' | 'daily' | 'sports' | 'clothing' | 'other'
+type Category = ProductCategory
 
-type Condition = 'new' | 'like_new' | 'good' | 'fair' | 'poor'
+type Condition = ProductCondition
 
 type AIAnalysis = {
   title: string
@@ -27,61 +35,15 @@ type AIAnalysis = {
   description: string
 }
 
-const categories: {
-  value: Category
-  label: string
-}[] = [
-  {
-    value: 'digital',
-    label: '数码',
-  },
-  {
-    value: 'books',
-    label: '书籍',
-  },
-  {
-    value: 'daily',
-    label: '生活用品',
-  },
-  {
-    value: 'sports',
-    label: '运动',
-  },
-  {
-    value: 'clothing',
-    label: '服饰',
-  },
-  {
-    value: 'other',
-    label: '其他',
-  },
-]
+const categories = PRODUCT_CATEGORIES.map((value) => ({
+  value,
+  label: PRODUCT_CATEGORY_LABELS[value],
+}))
 
-const conditions: {
-  value: Condition
-  label: string
-}[] = [
-  {
-    value: 'new',
-    label: '全新',
-  },
-  {
-    value: 'like_new',
-    label: '接近全新',
-  },
-  {
-    value: 'good',
-    label: '成色良好',
-  },
-  {
-    value: 'fair',
-    label: '有明显使用痕迹',
-  },
-  {
-    value: 'poor',
-    label: '成色较差',
-  },
-]
+const conditions = PRODUCT_CONDITIONS.map((value) => ({
+  value,
+  label: PRODUCT_CONDITION_LABELS[value],
+}))
 
 function yuanToCents(value: number) {
   return Math.round(value * 100)

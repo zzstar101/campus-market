@@ -1,5 +1,7 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
+import { PRODUCT_CATEGORIES, PRODUCT_CONDITIONS, PRODUCT_STATUSES } from '@campus/shared'
+
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey({ autoIncrement: true }),
 
@@ -26,9 +28,13 @@ export const products = sqliteTable('products', {
 
   title: text('title').notNull(),
 
-  category: text('category').notNull(),
+  category: text('category', {
+    enum: PRODUCT_CATEGORIES,
+  }).notNull(),
 
-  condition: text('condition').notNull(),
+  condition: text('condition', {
+    enum: PRODUCT_CONDITIONS,
+  }).notNull(),
 
   aiTags: text('ai_tags', {
     mode: 'json',
@@ -45,7 +51,7 @@ export const products = sqliteTable('products', {
   contact: text('contact').notNull(),
 
   status: text('status', {
-    enum: ['active', 'sold', 'off_shelf'],
+    enum: PRODUCT_STATUSES,
   })
     .notNull()
     .default('active'),

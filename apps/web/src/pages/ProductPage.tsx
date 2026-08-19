@@ -3,6 +3,12 @@ import { ArrowLeft, CalendarDays, CheckCircle2, Copy, EyeOff, RotateCcw } from '
 import { Link, useParams, useNavigate } from 'react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import {
+  PRODUCT_CATEGORY_LABELS,
+  PRODUCT_CONDITION_LABELS,
+  PRODUCT_STATUS_LABELS,
+  type ProductStatus,
+} from '@campus/shared'
 
 import { useAuth } from '@/auth/useAuth'
 import { api } from '@/api/client'
@@ -10,23 +16,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { Skeleton } from '@/components/ui/skeleton'
-
-const categoryLabels: Record<string, string> = {
-  digital: '数码',
-  books: '书籍',
-  daily: '生活用品',
-  sports: '运动',
-  clothing: '服饰',
-  other: '其他',
-}
-
-const conditionLabels: Record<string, string> = {
-  new: '全新',
-  like_new: '95新',
-  good: '9成新',
-  fair: '8成新',
-  poor: '有明显使用痕迹',
-}
 
 export function ProductPage() {
   const [selectedImage, setSelectedImage] = useState(0)
@@ -67,7 +56,7 @@ export function ProductPage() {
   })
 
   const statusMutation = useMutation({
-    mutationFn: async (status: 'active' | 'sold' | 'off_shelf') => {
+    mutationFn: async (status: ProductStatus) => {
       if (!id) {
         throw new Error('商品 ID 不存在')
       }
@@ -254,18 +243,18 @@ export function ProductPage() {
           <section>
             <div className="mb-4 flex flex-wrap gap-2">
               <Badge variant="secondary">
-                {categoryLabels[product.category] ?? product.category}
+                {PRODUCT_CATEGORY_LABELS[product.category] ?? product.category}
               </Badge>
 
               <Badge variant="outline">
-                {conditionLabels[product.condition] ?? product.condition}
+                {PRODUCT_CONDITION_LABELS[product.condition] ?? product.condition}
               </Badge>
 
-              {product.status === 'active' && <Badge variant="secondary">在售</Badge>}
+              {product.status === 'active' && <Badge variant="secondary">{PRODUCT_STATUS_LABELS.active}</Badge>}
 
-              {product.status === 'sold' && <Badge variant="destructive">已售出</Badge>}
+              {product.status === 'sold' && <Badge variant="destructive">{PRODUCT_STATUS_LABELS.sold}</Badge>}
 
-              {product.status === 'off_shelf' && <Badge variant="outline">已下架</Badge>}
+              {product.status === 'off_shelf' && <Badge variant="outline">{PRODUCT_STATUS_LABELS.off_shelf}</Badge>}
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight">{product.title}</h1>

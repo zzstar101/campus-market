@@ -6,17 +6,24 @@ import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { and, desc, eq, inArray, like, or, sql } from 'drizzle-orm'
 import type { JwtVariables } from 'hono/jwt'
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_CONDITIONS,
+  PRODUCT_STATUSES,
+  type ProductCategory,
+  type ProductStatus,
+} from '@campus/shared'
 
 import { DATA_DIR, db, UPLOADS_DIR } from '../db'
 import { productImages, products } from '../db/schema'
 import { authMiddleware, getAuthUser, isAdmin } from '../lib/auth'
 import { findBlockedTerm, validateImageContents } from '../lib/moderation'
 
-const categorySchema = z.enum(['digital', 'books', 'daily', 'sports', 'clothing', 'other'])
+const categorySchema = z.enum(PRODUCT_CATEGORIES)
 
-const conditionSchema = z.enum(['new', 'like_new', 'good', 'fair', 'poor'])
+const conditionSchema = z.enum(PRODUCT_CONDITIONS)
 
-const statusSchema = z.enum(['active', 'sold', 'off_shelf'])
+const statusSchema = z.enum(PRODUCT_STATUSES)
 
 const createProductSchema = z.object({
   title: z.string().trim().min(1).max(80),
@@ -112,8 +119,8 @@ async function attachImages(rows: Array<typeof products.$inferSelect>) {
 async function listProducts(options: {
   userId?: number
   q?: string
-  category?: string
-  status?: 'active' | 'sold' | 'off_shelf'
+  category?: ProductCategory
+  status?: ProductStatus
   includeHidden?: boolean
   page: number
   pageSize: number

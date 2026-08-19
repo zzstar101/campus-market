@@ -9,6 +9,12 @@
 - 数据库：SQLite
 - AI：OpenAI 多模态 Responses API，结构化输出由 Zod 校验
 
+## Monorepo 结构
+
+- `apps/web`：React 前端页面和交互
+- `apps/api`：Hono API、认证、商品接口和 SQLite 持久化
+- `packages/shared`：前后端共用的商品分类、成色、状态枚举及中文标签
+
 ## 环境配置
 
 需要安装 Bun 1.3 或更高版本，然后安装依赖：

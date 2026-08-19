@@ -1,7 +1,21 @@
 import OpenAI from 'openai'
 import { zodTextFormat } from 'openai/helpers/zod'
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_CATEGORY_LABELS,
+  PRODUCT_CONDITION_DESCRIPTIONS,
+  PRODUCT_CONDITIONS,
+} from '@campus/shared'
 
 import { aiAnalysisSchema } from '../schemas/ai'
+
+const CATEGORY_GUIDANCE = PRODUCT_CATEGORIES.map(
+  (category) => `- ${category}：${PRODUCT_CATEGORY_LABELS[category]}`,
+).join('\n')
+
+const CONDITION_GUIDANCE = PRODUCT_CONDITIONS.map(
+  (condition) => `- ${condition}：${PRODUCT_CONDITION_DESCRIPTIONS[condition]}`,
+).join('\n')
 
 const SYSTEM_PROMPT = `
 你是一名专业的校园二手商品识别与估价助手。
@@ -20,19 +34,10 @@ const SYSTEM_PROMPT = `
 7. 生成适合校园二手群发布的中文商品描述。
 
 分类只能是：
-- digital：数码
-- books：书籍
-- daily：生活用品
-- sports：运动
-- clothing：服饰
-- other：其他
+${CATEGORY_GUIDANCE}
 
 成色只能是：
-- new：全新/未使用
-- like_new：接近全新
-- good：正常使用、成色良好
-- fair：有明显使用痕迹但功能正常
-- poor：成色较差
+${CONDITION_GUIDANCE}
 
 priceMin 和 priceMax：
 - 单位是人民币“元”

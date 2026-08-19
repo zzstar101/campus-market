@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
+import { PRODUCT_CATEGORIES, PRODUCT_CATEGORY_LABELS, type ProductCategory } from '@campus/shared'
 
 import { api } from '@/api/client'
 import { ProductCard } from '@/components/product/ProductCard'
@@ -25,37 +26,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useAuth } from '@/auth/useAuth'
 
 const categories = [
-  {
-    value: 'all',
-    label: '全部',
-  },
-  {
-    value: 'digital',
-    label: '数码',
-  },
-  {
-    value: 'books',
-    label: '书籍',
-  },
-  {
-    value: 'daily',
-    label: '生活用品',
-  },
-  {
-    value: 'sports',
-    label: '运动',
-  },
-  {
-    value: 'clothing',
-    label: '服饰',
-  },
-  {
-    value: 'other',
-    label: '其他',
-  },
-] as const
+  { value: 'all' as const, label: '全部' },
+  ...PRODUCT_CATEGORIES.map((value) => ({
+    value,
+    label: PRODUCT_CATEGORY_LABELS[value],
+  })),
+]
 
-type Category = (typeof categories)[number]['value']
+type Category = 'all' | ProductCategory
 
 export function HomePage() {
   const [search, setSearch] = useState('')
