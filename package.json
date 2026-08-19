@@ -1,0 +1,8 @@
+{
+  "name": "campus-market",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
